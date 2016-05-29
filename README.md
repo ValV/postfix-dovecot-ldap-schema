@@ -22,9 +22,9 @@ These attributes and object classes are based on the [Postfix LDAP README](http:
 > `grep -Ri 'attributetype' /path/to/ldap | grep 'mail'`
 > And no other object classes with such names:
 > `grep -Ri 'objectclass' /path/to/ldap | grep 'postfix'`
-> Where */path/to/ldap* is the location of OpenLDAP configuration, e.g. in Debian it may be */etc/ldap* and in Archlinux it may be */etc/openldap*
+> Where `/path/to/ldap` is the location of OpenLDAP configuration, e.g. in Debian it may be `/etc/ldap` and in Archlinux it may be `/etc/openldap`.
 
-As mentioned above, all the attributes ans object classes are based on the official *Postfix LDAP README* but names differ. Here's the match-table between *official names* and the current.
+As mentioned above, all the attributes ans object classes are based on the official **Postfix LDAP README** but names differ. Here's the match-table between *official names* and the current.
 
 | Postfix example        | Current scheme         |
 | ---------------------- | ---------------------- |
@@ -38,13 +38,13 @@ As mentioned above, all the attributes ans object classes are based on the offic
 | ldapgroup              | postfixVirtualGroup    |
 | maillist               | postfixMailList        |
 
-> Note: mail attribute (from core.schema) is used for mailAcceptingGeneralId, so this schema does depend on core.schema (it seems to be ok since in most cases core schema is included by default).
+> Note: *mail* attribute (from *core.schema*) is used for *mailAcceptingGeneralId*, so this schema does depend on *core.schema* (it seems to be ok since in most cases core schema is included by default).
 
-Object classes *postfixAccount* and *postfixGroup* are auxiliary, so they are intended to be added to some objects, e.g. add postfixAccount to posixAccount to make **real user** account capable for Posfix LDAP lookups. That's why object classes for *ldapuser* and *ldapgroup* are called **virtual** - they can be declared as stand-alone (virtual) objects (users). Assume that one have **real users** in `ou=users,dc=example,dc=org` declared as posixAccount and augmented with postfixAccount, and **virtual users** in `ou=accounts,ou=email,dc=example,dc=org` declared as postfixVirtualAccount.
+Object classes *postfixAccount* and *postfixGroup* are auxiliary, so they are intended to be added to some objects, e.g. add *postfixAccount* to *posixAccount* to make **real user** account capable for Posfix LDAP lookups. That's why object classes for *ldapuser* and *ldapgroup* are called **virtual** - they can be declared as stand-alone (virtual) objects (users). Assume that one have **real users** in `ou=users,dc=example,dc=org` declared as *posixAccount* and augmented with *postfixAccount*, and **virtual users** in `ou=accounts,ou=email,dc=example,dc=org` declared as *postfixVirtualAccount*.
 
-> The method above can be extrapolated to postfixGroup and postfixVirtualGroup
+> The method above can be extrapolated to *postfixGroup* and *postfixVirtualGroup*
 
-Object class postfixMailList can be used as in *Postfix LDAP README* example:
+Object class postfixMailList can be used as in **Postfix LDAP README** example:
 ```
 dn: cn=mailing-list-alpha, ou=lists, ou=email, dc=example, dc=org
 cn: mailing-list-alpha
