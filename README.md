@@ -1,0 +1,1 @@
+# Postfix-Dovecot LDAP schema
