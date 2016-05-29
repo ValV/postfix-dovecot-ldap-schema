@@ -9,14 +9,14 @@ This part is made of attributes:
 - mailGroupMemberDN
 - mailGroupMemberAddress
 
-And object classes
+And object classes:
 - postfixAccount
 - postfixGroup
 - postfixVirtualAccount
 - postfixVirtualGroup
 - postfixMailList
 
-These attributes and object classes are based on the [Postfix LDAP README](http://www.postfix.org/LDAP_README.html) with more convenient (from my view) names.
+These attributes and object classes are based on the [Postfix LDAP README](http://www.postfix.org/LDAP_README.html) with more convenient (in my view) names.
 
 > Note: some names may collide with other schemes, so before adding this one ensure that there's no other attributes with such names:
 > `grep -Ri 'attributetype' /path/to/ldap | grep 'mail'`
@@ -58,3 +58,61 @@ mailBox: max-1987@example.org
 ```
 
 > Note: OID in this schema is of type *Experimental OpenLDAP* (as in [credativ/postfix-ldap-schema](https://github.com/credativ/postfix-ldap-schema)) - so to avoid collisions one should check before existing OIDs with `grep -Ri '1.3.6.1.4.1.4203.666' /path/to/ldap/`
+
+## Dovecot section
+
+This part relies solely on attributes, because of Dovecot's lookup specific. These attributes are used to store data for Dovecot's fields of **passdb** and **userdb** lookups.
+According to the Dovecot's wiki on [Password Databases](http://wiki2.dovecot.org/PasswordDatabase#lookupdbs) fields that are necessary to return data from LDAP with **passdb** lookup:
+- password (if one uses [Password Lookups](http://wiki2.dovecot.org/AuthDatabase/LDAP/PasswordLookups) over [Authentiaction Bind](http://wiki2.dovecot.org/AuthDatabase/LDAP/AuthBinds))
+- user
+
+Fields for **userdb** lookups as it is stated in [User Databases](http://wiki2.dovecot.org/UserDatabase) are as follows:
+- uid
+- gid
+- home
+- mail (overrides *mail_location* setting)
+- quota_rule
+
+And the [Extra Fields](http://wiki2.dovecot.org/PasswordDatabase/ExtraFields):
+- user
+- login_user
+- allow_nets
+- proxy
+- proxy_maybe
+- host
+- nologin
+- nodelay
+- nopassword
+- fail
+- k5principals
+
+Here's the match-table for Dovecot fields and the schema attributes.
+
+| Dovecot field          | Schema attribute       |
+| ---------------------- | ---------------------- |
+| password               | mailPassword           |
+| uid                    | mailUidNumber          |
+| gid                    | mailGidNumber          |
+| home                   | mailHomeDirectory      |
+| mail                   | mailLocation           |
+| quota_rule             | mailQuota              |
+| user                   | -                      |
+| login_user             | -                      |
+| allow_nets             | -                      |
+| proxy                  | -                      |
+| proxy_maybe            | -                      |
+| host                   | -                      |
+| nologin                | -                      |
+| nodelay                | -                      |
+| nopassword             | mailNoPassword         |
+| fail                   | mailDisabled           |
+| k5principals           | -                      |
+
+Attributes *mailPassword*, *mailUidNumber* and *mailGidNumber* are so-called **virtual** attributes, i.e. they're intended to be used for **virtual users**. For **real users** one should use *real passwords*, *real UIDs*, and *real GIDs* (e.g. *userPassword* from *core.schema*, *uidNumber*, and *gidNumber* from *nis.schema*).
+Attributes *mailHomeDirectory* and *mailLocation* can be used with **real users**, if there's necessity to set up different location for mail for existing posix accounts.
+Field *user* usually comes from *uid* (also *userid*, *core.schema*).
+
+##### TODO
+- [ ] add the rest of the attributes for Dovecot fields
+- [ ] check *uid*s or *userid*s for *postfixVirtualAccount*
+
