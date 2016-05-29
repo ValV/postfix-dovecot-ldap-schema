@@ -57,4 +57,4 @@ mailBox: brigitte-1872@example.org
 mailBox: max-1987@example.org
 ```
 
-> Note: OID in this schema is of type *Experimental OpenLDAP* (as in @credativ/postfix-ldap-schema) - so to avoid collisions one should check before existing OIDs with `grep -Ri '1.3.6.1.4.1.4203.666' /path/to/ldap/`
+> Note: OID in this schema is of type *Experimental OpenLDAP* (as in [credativ/postfix-ldap-schema](https://github.com/credativ/postfix-ldap-schema)) - so to avoid collisions one should check before existing OIDs with `grep -Ri '1.3.6.1.4.1.4203.666' /path/to/ldap/`
